@@ -77,9 +77,9 @@ void CalcCorners(const Mat& H, const Mat& src)
 
 int main()
 {
-	Mat img = imread(IMAGE_PATH_PREFIX + "orb1.jpg");
+	Mat img = imread(IMAGE_PATH_PREFIX + "orb2.jpg");
 	imgs.push_back(img);
-	img = imread(IMAGE_PATH_PREFIX + "orb2.jpg");
+	img = imread(IMAGE_PATH_PREFIX + "orb1.jpg");
 	imgs.push_back(img);
 	//img = imread(IMAGE_PATH_PREFIX + "boat3.jpg");
 	//imgs.push_back(img);
@@ -91,16 +91,12 @@ int main()
 	//imgs.push_back(img);
 	//img = imread(IMAGE_PATH_PREFIX + "boat6.jpg");
 	//imgs.push_back(img);
-	for (int i = 0; i <imgs.size(); i++)
-	{
-		imshow("picture", imgs[i]);
-	}
 	//灰度图片转换
 	vector<Mat> cvt_imgs;
 	for (int i = 0; i < imgs.size(); i++)
 	{
 		Mat temp;
-		cvtColor(imgs[0], temp, CV_RGB2GRAY);
+		cvtColor(imgs[i], temp, CV_RGB2GRAY);
 		cvt_imgs.push_back(temp);
 	}
 
@@ -164,15 +160,15 @@ int main()
 	warpPerspective(imgs[0], imageTransform1, homo, Size(MAX(corners.right_top.x, corners.right_bottom.x), imgs[1].rows));
 	imagesTransform.push_back(imageTransform1);
 	imagesTransform.push_back(imageTransform2);
-	imshow("直接经过透视矩阵变换", imagesTransform[0]);
+	imshow("直接经过透视矩阵变换", imageTransform1);
 	imwrite(IMAGE_PATH_PREFIX + "orb_transform_result.jpg", imageTransform1);
 
 	//图像拷贝
-	int dst_width = imagesTransform[0].cols;
+	int dst_width = imageTransform1.cols;
 	int dst_height = imgs[1].rows;
 	Mat dst(dst_height, dst_width, CV_8UC3);
 	dst.setTo(0);
-	imagesTransform[0].copyTo(dst(Rect(0, 0, imagesTransform[0].cols, imagesTransform[0].rows)));
+	imageTransform1.copyTo(dst(Rect(0, 0, imageTransform1.cols, imageTransform1.rows)));
 	imgs[1].copyTo(dst(Rect(0, 0, imgs[1].cols, imgs[1].rows)));
 	imshow("copy_dst", dst);
 	imwrite(IMAGE_PATH_PREFIX + "copy_dst.jpg", dst);

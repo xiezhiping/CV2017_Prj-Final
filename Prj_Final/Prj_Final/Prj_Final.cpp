@@ -172,6 +172,13 @@ int main()
 	imgs[1].copyTo(dst(Rect(0, 0, imgs[1].cols, imgs[1].rows)));
 	imshow("copy_dst", dst);
 	imwrite(IMAGE_PATH_PREFIX + "copy_dst.jpg", dst);
+
+	//优化拼接边缘
+	OptimizeSeam(imgs[1], imageTransform1, dst);
+	imshow("边缘优化结果", dst);
+	imwrite(IMAGE_PATH_PREFIX + "better_copy_dst.jpg", dst);
+
+
 	Mat first_match;
 	drawMatches(imgs[1], keyPoints[1], imgs[0], keyPoints[0], GoodMatchPoints, first_match);
 	imshow("first_match", first_match);
